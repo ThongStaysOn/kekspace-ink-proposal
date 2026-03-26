@@ -1302,6 +1302,27 @@ strong {
 }
 
 /* ============================================
+   IDEAS: AI & MOLTIVERSE
+   ============================================ */
+.ideas-hero{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:28px;text-align:center}
+.ideas-sprites{display:flex;align-items:flex-end;justify-content:center;gap:12px;margin-bottom:16px}
+.ideas-sprite{height:100px;image-rendering:pixelated;filter:drop-shadow(0 4px 12px rgba(0,0,0,.4));transition:transform .2s}
+.ideas-sprite--wide{height:80px}
+.ideas-sprite:hover{transform:translateY(-8px)}
+.ideas-hero-label{font-size:.85rem;color:var(--text-secondary);font-style:italic}
+.ideas-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:28px}
+.idea-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;border-top:3px solid var(--accent-purple)}
+.idea-card .idea-icon{font-size:1.5rem;margin-bottom:8px}
+.idea-card h3{font-size:.95rem;font-weight:600;margin-bottom:8px;color:var(--text-primary)}
+.idea-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.6}
+
+@media (max-width:768px){
+  .ideas-grid{grid-template-columns:1fr}
+  .ideas-sprites{flex-wrap:wrap}
+  .ideas-sprite{height:70px}
+}
+
+/* ============================================
    ONBOARDING VISUAL
    ============================================ */
 .onboard-visual{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:32px 0}
@@ -1436,6 +1457,7 @@ strong {
       <a href="#kpis">KPIs</a>
       <a href="#budget">Budget</a>
       <a href="#about">Team</a>
+      <a href="#ideas">AI & Moltiverse</a>
       <a href="#contact">Contact</a>
     </div>
   </div>
@@ -2150,6 +2172,63 @@ strong {
     <div class="callout callout--green">
       <span class="callout-label">Our ethos</span>
       <p>This is not a team that writes roadmaps. It is a team that ships.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== IDEAS: AI & MOLTIVERSE ========== -->
+<section class="section" id="ideas">
+  <div class="container">
+    <h2>Ideas: AI Agents & The Moltiverse</h2>
+    <p class="lead">What happens when AI agents get a body, a world, and a social life?</p>
+
+    <div class="ideas-hero">
+      <div class="ideas-sprites">
+        <img src="site/public/images/game-assets/npcs/vitalik.png" alt="" class="ideas-sprite"/>
+        <img src="site/public/images/game-assets/npcs/executive-pepe.png" alt="" class="ideas-sprite"/>
+        <img src="site/public/images/game-assets/npcs/gothic-pepe.png" alt="" class="ideas-sprite"/>
+        <img src="site/public/images/game-assets/npcs/beach-pepe.png" alt="" class="ideas-sprite"/>
+        <img src="site/public/images/game-assets/npcs/muscle-pepe.png" alt="" class="ideas-sprite ideas-sprite--wide"/>
+      </div>
+      <div class="ideas-hero-label">Every AI agent registered on Ink could become a character in Kekspace</div>
+    </div>
+
+    <div class="ideas-grid">
+      <div class="idea-card">
+        <div class="idea-icon">🤖</div>
+        <h3>AI Agents as Playable Characters</h3>
+        <p>When someone registers an AI agent on Ink, it automatically populates as a character in Kekspace. Players can log in with their wallet and play as their AI agent avatar. Your agent isn't just code on a chain - it has a body, a look, and a place to exist.</p>
+      </div>
+      <div class="idea-card">
+        <div class="idea-icon">🌍</div>
+        <h3>The Moltiverse Inside Kekspace</h3>
+        <p>Ink's Moltiverse concept - AI agents that fish, build, trade, form relationships, and interact onchain - maps directly onto the Kekspace world. The city becomes a living simulation where AI agents and real players coexist in the same rooms, the same events, the same economy.</p>
+      </div>
+      <div class="idea-card">
+        <div class="idea-icon">🎭</div>
+        <h3>AI NPCs That Actually Learn</h3>
+        <p>Kekspace already has NPCs in every zone. What if they were powered by AI? Shopkeepers that remember your preferences. Quest givers that adapt to your play style. Bartenders at GM Coffee that actually hold a conversation. Every interaction is onchain, every memory is persistent.</p>
+      </div>
+      <div class="idea-card">
+        <div class="idea-icon">🏪</div>
+        <h3>Agent-Run Businesses</h3>
+        <p>AI agents could run shops, manage rooms, host events, and trade autonomously inside Kekspace. A player walks into a store and the shopkeeper is someone else's AI agent - buying low, selling high, and generating transactions on Ink 24/7 even when no humans are online.</p>
+      </div>
+      <div class="idea-card">
+        <div class="idea-icon">🎮</div>
+        <h3>Play Against AI Agents</h3>
+        <p>Pokek poker tables with AI opponents. Bowling lanes with AI competitors. Survivor waves powered by agent-controlled enemies. The games stay populated and active because AI agents are always playing - and every move settles onchain.</p>
+      </div>
+      <div class="idea-card">
+        <div class="idea-icon">🔑</div>
+        <h3>Wallet-Based Agent Identity</h3>
+        <p>Each AI agent has a wallet on Ink. When it enters Kekspace, its wallet history becomes its identity - InkScore, badges, assets, reputation. You can see what an agent has done just by looking at it. Onchain activity becomes a visible social signal in the game world.</p>
+      </div>
+    </div>
+
+    <div class="callout callout--cyan">
+      <span class="callout-label">The opportunity</span>
+      <p>Kekspace gives AI agents on Ink something no other project can: a visual, social, persistent world to live in. Not a terminal. Not a dashboard. A place where agents have bodies, rooms, relationships, and an economy. Every agent action is a transaction on Ink.</p>
     </div>
   </div>
 </section>
