@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kekspace × Ink - What We're Thinking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CSS RESET & BASE
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-primary: #0a0a12;
+  --bg-secondary: #0f0f1e;
+  --bg-card: #14142a;
+  --bg-elevated: #1a1a36;
+
+  --text-primary: #e8e8f0;
+  --text-secondary: #a0a0b8;
+  --text-muted: #6a6a82;
+
+  --green: #22d97f;
+  --green-dim: rgba(34, 217, 127, 0.12);
+  --green-border: rgba(34, 217, 127, 0.35);
+
+  --cyan: #00c8ff;
+  --cyan-dim: rgba(0, 200, 255, 0.10);
+  --cyan-border: rgba(0, 200, 255, 0.35);
+
+  --pink: #ff4da6;
+  --pink-dim: rgba(255, 77, 166, 0.10);
+  --pink-border: rgba(255, 77, 166, 0.35);
+
+  --purple: #9b59ff;
+  --purple-dim: rgba(155, 89, 255, 0.10);
+  --purple-border: rgba(155, 89, 255, 0.35);
+
+  --gold: #ffc857;
+  --gold-dim: rgba(255, 200, 87, 0.10);
+
+  --orange: #ff8c42;
+
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  --max-width: 960px;
+  --nav-height: 60px;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-height) + 20px);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(0, 200, 255, 0.3);
+  color: #fff;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--cyan);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover { color: var(--green); }
+
+/* ============================================
+   STICKY NAV
+   ============================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 10, 18, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+}
+
+.nav-inner {
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.nav-brand img {
+  height: 32px;
+  width: auto;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+
+.nav-links a {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+.nav-links a:hover {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.05);
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  padding: 80px 0;
+}
+
+.section + .section {
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+/* ============================================
+   HERO
+   ============================================ */
+.hero {
+  padding: 100px 0 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.hero-slideshow { position: absolute; inset: 0; z-index: 0; }
+.hero-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s ease; }
+.hero-slide--active { opacity: 1; }
+.hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(10,10,18,.7) 0%, rgba(10,10,18,.85) 50%, rgba(10,10,18,.95) 100%); }
+.hero .container { position: relative; z-index: 2; }
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  z-index: 3;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(155, 89, 255, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-logo {
+  width: 180px;
+  margin: 0 auto 32px;
+  position: relative;
+}
+
+.hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.hero h1 .accent-green { color: var(--green); }
+.hero h1 .accent-purple { color: #a855f7; }
+.hero h1 .times {
+  font-size: 1.4em;
+  font-weight: 900;
+  background: linear-gradient(135deg, #4ade80 0%, #4ade80 30%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(74,222,128,.3)) drop-shadow(0 0 20px rgba(168,85,247,.3));
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 20px;
+  line-height: 1.6;
+}
+
+.hero-tagline {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cyan);
+  background: var(--cyan-dim);
+  border: 1px solid var(--cyan-border);
+  padding: 8px 20px;
+  border-radius: 100px;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(26px, 3.5vw, 36px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(18px, 2.5vw, 22px);
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+h4 {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+p {
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+}
+
+p:last-child { margin-bottom: 0; }
+
+.lead {
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ============================================
+   CALLOUT BOXES
+   ============================================ */
+.callout {
+  padding: 24px 28px;
+  border-radius: 12px;
+  margin: 28px 0;
+  border-left: 4px solid;
+  position: relative;
+}
+
+.callout--green {
+  background: var(--green-dim);
+  border-color: var(--green);
+}
+.callout--green strong,
+.callout--green .callout-label { color: var(--green); }
+
+.callout--cyan {
+  background: var(--cyan-dim);
+  border-color: var(--cyan);
+}
+.callout--cyan strong,
+.callout--cyan .callout-label { color: var(--cyan); }
+
+.callout--purple {
+  background: var(--purple-dim);
+  border-color: var(--purple);
+}
+.callout--purple strong,
+.callout--purple .callout-label { color: var(--purple); }
+
+.callout-label {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.callout p {
+  margin-bottom: 0;
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.callout--emphasis {
+  background: linear-gradient(135deg, var(--green-dim), var(--cyan-dim));
+  border-color: var(--green);
+  border-left: none;
+  text-align: center;
+  border: 1px solid var(--green-border);
+}
+.callout--emphasis p {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+/* ============================================
+   IMAGE BLOCKS
+   ============================================ */
+.img-block {
+  margin: 36px 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: var(--bg-card);
+}
+
+.img-block img {
+  width: 100%;
+  display: block;
+}
+
+.img-block figcaption {
+  padding: 12px 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ============================================
+   IDEA MODULE CARDS
+   ============================================ */
+.ideas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 40px 0;
+}
+
+.idea-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.idea-card:hover {
+  border-color: rgba(255,255,255,0.14);
+  transform: translateY(-3px);
+}
+
+.idea-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.idea-card--arrival::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+.idea-card--nado::before { background: linear-gradient(90deg, var(--cyan), var(--purple)); }
+.idea-card--tydro::before { background: linear-gradient(90deg, var(--purple), var(--pink)); }
+.idea-card--velodrome::before { background: linear-gradient(90deg, var(--gold), var(--green)); }
+.idea-card--inkscore::before { background: linear-gradient(90deg, var(--pink), var(--gold)); }
+.idea-card--community::before { background: linear-gradient(90deg, var(--green), var(--gold)); }
+.idea-card--drop::before { background: linear-gradient(90deg, var(--pink), var(--purple), var(--cyan)); }
+.idea-card--ai::before { background: linear-gradient(90deg, var(--purple), var(--cyan), var(--green)); }
+
+.idea-card--wide {
+  grid-column: 1 / -1;
+}
+
+.idea-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 20px;
+  border: 2px solid;
+}
+
+.idea-card--arrival .idea-icon { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+.idea-card--nado .idea-icon { background: var(--cyan-dim); border-color: var(--cyan); color: var(--cyan); }
+.idea-card--tydro .idea-icon { background: var(--purple-dim); border-color: var(--purple); color: var(--purple); }
+.idea-card--velodrome .idea-icon { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
+.idea-card--inkscore .idea-icon { background: var(--pink-dim); border-color: var(--pink); color: var(--pink); }
+.idea-card--community .idea-icon { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+.idea-card--drop .idea-icon { background: var(--purple-dim); border-color: var(--purple); color: var(--purple); }
+.idea-card--ai .idea-icon { background: var(--cyan-dim); border-color: var(--cyan); color: var(--cyan); }
+
+.idea-num {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.idea-card h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.idea-hook {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.idea-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+/* ============================================
+   SPRITES ROW
+   ============================================ */
+.sprites-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  margin: 20px 0 16px;
+}
+
+.sprites-row img {
+  height: 80px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+  transition: transform 0.2s;
+}
+
+.sprites-row img:hover {
+  transform: translateY(-6px);
+}
+
+/* ============================================
+   OPPORTUNITY GRID
+   ============================================ */
+.opp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.opp-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 24px 22px;
+}
+
+.opp-card h4 {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.opp-card--ink h4 { color: var(--purple); }
+.opp-card--kek h4 { color: var(--green); }
+
+.opp-card p {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   CONTACT
+   ============================================ */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.contact-item {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+}
+
+.contact-item .label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  font-family: var(--font-heading);
+  font-weight: 500;
+}
+
+.contact-item .value {
+  font-size: 14px;
+  color: var(--cyan);
+  font-weight: 500;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+  padding: 40px 0;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+.footer p {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ============================================
+   SCROLL REVEAL
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .section { padding: 56px 0; }
+  .hero { padding: 72px 0 56px; }
+  .hero-logo { width: 140px; }
+
+  .ideas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .idea-card--wide {
+    grid-column: auto;
+  }
+
+  .opp-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sprites-row img { height: 60px; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+  .callout { padding: 20px; }
+  .idea-card { padding: 24px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <img src="site/public/images/game-assets/logos/kekspace-logo.png" alt="Kekspace">
+      <span>&times; Ink</span>
+    </div>
+    <div class="nav-links">
+      <a href="#whats-live">The Game</a>
+      <a href="#onchain">Onchain</a>
+      <a href="#ideas">Ideas</a>
+      <a href="#proof">Proof</a>
+      <a href="#big-swings">Big Swings</a>
+      <a href="#opportunity">Opportunity</a>
+      <a href="#contact">Let's Talk</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<header class="hero" id="top">
+  <div class="hero-slideshow">
+    <img class="hero-slide hero-slide--active" src="new images/City 8K.png" alt=""/>
+    <img class="hero-slide" src="new images/Arcade8K.png" alt=""/>
+    <img class="hero-slide" src="new images/Cemetery.V2.8K.png" alt=""/>
+    <img class="hero-slide" src="new images/Gallery.8K.png" alt=""/>
+    <img class="hero-slide" src="new images/Park8K.png" alt=""/>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <img class="hero-logo" src="site/public/images/game-assets/logos/kekspace-logo.png" alt="Kekspace Logo">
+    <h1>
+      <span class="accent-green">Kekspace</span>
+      <span class="times">&times;</span>
+      <span class="accent-purple">Ink</span>
+    </h1>
+    <p class="hero-subtitle">What we're thinking.</p>
+    <span class="hero-tagline">A live game. A live community. Ideas for building together on Ink.</span>
+  </div>
+</header>
+
+<!-- ========== WHAT'S LIVE ========== -->
+<section class="section" id="whats-live">
+  <div class="container">
+    <h2>What's live right now</h2>
+    <p class="lead">Kekspace is a browser-based social world built in Unity with SmartFoxServer real-time multiplayer. Not a deck, not a prototype - a live game with people in it. 16 zones across a sprawling isometric pixel city. Six minigames live. A full social stack. And an architecture built to go onchain.</p>
+
+    <figure class="img-block reveal">
+      <img src="content/pitch-deck/08-city-overview.png" alt="Kekspace City Overview">
+      <figcaption>The isometric pixel city of Kekspace - 16 zones and growing</figcaption>
+    </figure>
+
+    <h3>What players do right now</h3>
+    <p><strong>Play minigames</strong> - Survivor, Frog Bowling, Whack-A-Meme, Rock Paper Scissors, and Trash are live. Pokek (full poker with rooms, tournaments, spectator mode, and chip management) and Fishing are in progress.</p>
+    <p><strong>Customize characters</strong> - 274+ hats, 202+ pants, 150+ outerwear, 126+ pets, 98+ shirts, 90+ backpacks, 70+ glasses and masks, 34+ necklaces across 15+ equipment slots. All pixel art created in-house.</p>
+    <p><strong>Decorate Kekpads</strong> - private rooms with a grid-based furniture placement system. Multiple themed furniture sets including modern, pepe-themed, and premium collections.</p>
+    <p><strong>Socialize</strong> - bubble chat, private messaging, global and room chat, emoji system, friends list, and a full moderation stack. The social layer is production-grade.</p>
+    <p><strong>Complete quests</strong> - NPC dialog system with branching conversations, quest tracking, rewards, badges, and a recently shipped leveling system with XP progression.</p>
+    <p>Item trading, marketplace, and crafting systems are built but not yet deployed - they're waiting for the onchain layer.</p>
+
+    <div class="callout callout--green reveal">
+      <span class="callout-label">Organic traction</span>
+      <p><strong>400+ players showed up for The Krakening</strong> - a live Kraken-themed event inside Kekspace. No web3 launch, no marketing budget, limited gameplay. That's organic pull from a product that hasn't tried to grow yet. Ink is the growth catalyst.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WHAT ONCHAIN MEANS ========== -->
+<section class="section" id="onchain">
+  <div class="container">
+    <h2>What onchain means for us</h2>
+    <p class="lead">The game already has wallet connection via AppKit, personal signature authentication, and an NFT display system in the codebase. Trading and marketplace systems are built but not deployed. The web3 plumbing is partially there - what's missing is the chain to deploy it on. That's the gap, and the opportunity.</p>
+
+    <p>Deployed on Ink, character customizations could become NFT mints. Furniture purchases could become onchain transactions. Item trades could settle P2P. Quest rewards could become token transfers. The base is built - Ink is where the economy comes to life.</p>
+
+    <p>Ink's infrastructure is exactly what makes this viable for a game - low fees for frequent small transactions, fast minting for real-time event drops, Kraken Wallet integration for near-zero onboarding friction, and account abstraction tooling that lets retail players skip the complexity entirely.</p>
+
+    <h3>The billboard network</h3>
+    <p>Kekspace has an in-game billboard system placed across high-traffic zones in the city. On Ink, billboards become rentable onchain - projects and communities pay to advertise inside a living world, reaching engaged crypto-native users where they already spend time. Players interact with billboards to view expanded content, access external links, or browse collections. The billboard network turns Kekspace into a distribution and advertising platform for the entire Ink ecosystem.</p>
+
+    <figure class="img-block reveal">
+      <img src="content/pitch-deck/17-billboard-network.png" alt="Billboard Network">
+      <figcaption>In-game billboard network - a distribution surface for the Ink ecosystem</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ========== IDEAS ========== -->
+<section class="section" id="ideas">
+  <div class="container">
+    <h2>Ideas for building on Ink</h2>
+    <p class="lead">These aren't commitments or a roadmap. They're ideas for what building on Ink could look like. Some might be the right starting point. Some might be phase two. Some might need to be completely rethought. That's the conversation we want to have.</p>
+
+    <div class="ideas-grid">
+
+      <div class="idea-card idea-card--arrival reveal">
+        <div class="idea-icon">&#x1F6EC;</div>
+        <span class="idea-num">Idea 01</span>
+        <h3>Ink Arrival District</h3>
+        <div class="idea-hook">What if the first thing a new user sees on Ink is a city?</div>
+        <p>A landing zone inside Kekspace where users arrive in guest mode, connect a wallet, bridge into Ink, verify their identity, and get routed into their first action - all inside the game world. Not a dashboard. A place. The kind of first experience that makes Ink feel like a destination worth coming back to.</p>
+      </div>
+
+      <div class="idea-card idea-card--nado reveal">
+        <div class="idea-icon">&#x1F4C8;</div>
+        <span class="idea-num">Idea 02</span>
+        <h3>Nado Trading Arcade</h3>
+        <div class="idea-hook">What if Nado had a trading floor inside the game?</div>
+        <p>Terminals that anyone - players, communities, room owners - can install in their own rooms. The game already has a full poker system with rooms, tournaments, and chip management - the social trading UX patterns exist. Builder Codes make the distribution monetizable. Nado's own messaging says infrastructure isn't the bottleneck anymore, distribution is. This is distribution.</p>
+      </div>
+
+      <div class="idea-card idea-card--tydro reveal">
+        <div class="idea-icon">&#x1F3E6;</div>
+        <span class="idea-num">Idea 03</span>
+        <h3>Tydro Bank</h3>
+        <div class="idea-hook">What if lending made sense to people who aren't DeFi natives?</div>
+        <p>A bank in the city where you can see your collateral, watch your health factor, and understand what happens if the price moves - without reading a spreadsheet. Tydro is one of the most important financial apps on Ink. If Kekspace can make it easier for ordinary users to understand and trust, that's useful for deposits, borrowers, and the whole ecosystem.</p>
+      </div>
+
+      <div class="idea-card idea-card--velodrome reveal">
+        <div class="idea-icon">&#x1F4B0;</div>
+        <span class="idea-num">Idea 04</span>
+        <h3>Velodrome Bazaar</h3>
+        <div class="idea-hook">What if LP discovery felt like browsing a market?</div>
+        <p>Pool discovery, simple stable vs. volatile explainers, deposit flows - all presented visually instead of as a table of numbers. Protocols get a space to attract LPs. Users understand what they're doing before they do it.</p>
+      </div>
+
+      <div class="idea-card idea-card--inkscore reveal">
+        <div class="idea-icon">&#x1F3C5;</div>
+        <span class="idea-num">Idea 05</span>
+        <h3>InkScore + Kraken Verify</h3>
+        <div class="idea-hook">What if onchain activity became a visible part of who you are?</div>
+        <p>Badges, room access, cosmetic unlocks - all tied to real Ink activity. Your InkScore becomes a nameplate. Your Verify status unlocks rooms. Your wallet history shapes how the world sees you. Onchain reputation becomes social currency inside the game.</p>
+      </div>
+
+      <div class="idea-card idea-card--community reveal">
+        <div class="idea-icon">&#x1F3E0;</div>
+        <span class="idea-num">Idea 06</span>
+        <h3>Community HQ Rooms</h3>
+        <div class="idea-hook">What if every Ink project had a room in the city?</div>
+        <p>Part chatroom, part website, part event venue. Embedded protocol terminals. Audio and video for AMAs, podcasts, and live streams. Token-gated or Verify-gated access. The Kekpad private room system, SmartFoxServer networking, and furniture placement engine already exist - community rooms are an extension of infrastructure that's live in production. Every Ink project gets a space that's more interesting than a Discord server.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== PROOF ========== -->
+<section class="section" id="proof">
+  <div class="container">
+    <h2>We've done this before</h2>
+    <p class="lead">We didn't just imagine what brand integration could look like inside Kekspace. We built it. With Kraken.</p>
+
+    <p><strong>The Krakening</strong> was a live event - themed outfits, environmental lighting, custom quests, limited-edition collectibles. Hundreds of players showed up at midnight. The items are still being traded. Not a banner ad. A living brand experience inside a living world.</p>
+
+    <figure class="img-block reveal">
+      <img src="content/pitch-deck/13-event-krakening.png" alt="The Krakening Event">
+      <figcaption>The Krakening - a live brand integration event inside Kekspace</figcaption>
+    </figure>
+
+    <p>The world transforms with seasons. Halloween turns everything dark with mazes, cursed items, and themed quests. Christmas covers every zone in snow with an advent calendar and daily gifts. Each event brings people back and gives new players a reason to show up. On Ink, each event becomes a predictable burst of onchain activity - mints, trades, rewards, social media.</p>
+
+    <div class="callout callout--cyan reveal">
+      <span class="callout-label">Not a banner ad</span>
+      <p>Not a banner ad. A living brand experience inside a living world.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== BIG SWINGS ========== -->
+<section class="section" id="big-swings">
+  <div class="container">
+    <h2>The big swing</h2>
+    <p class="lead">The idea that keeps us up at night. Not necessarily part of a first phase - but the kind of thing that could make Ink genuinely different from every other L2.</p>
+
+    <div class="ideas-grid">
+
+      <div class="idea-card idea-card--drop idea-card--wide reveal">
+        <div class="idea-icon">&#x1F388;</div>
+        <span class="idea-num">Big Swing 01</span>
+        <h3>Drop Party Launchpad</h3>
+        <div class="idea-hook">What if token launches looked like Runescape drop parties?</div>
+        <p>Players gather in a room. A founder configures the launch at a chest. Balloons drop in timed waves around the room. You move to pop them for a chance at an allocation. The event continues until the bonding mechanism or fill condition completes. Liquidity migrates.</p>
+        <p>Fair by design - per-wallet wave limits, random drop positions, Verify-gated rooms, cooldowns, VRF-backed randomness. No sniping, no bundling, no cabal advantage. Just live spectacle, social ceremony, and built-in virality. The kind of thing people record and share.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== THE OPPORTUNITY ========== -->
+<section class="section" id="opportunity">
+  <div class="container">
+    <h2>The opportunity</h2>
+    <p class="lead">Kekspace is heading for the Epic Games Store - 78 million monthly active users, free to play. With Ink as the onchain layer, every transaction settles on Kraken's L2. Retail gamers exposed to an Ink-native game where onchain ownership is baked into the experience from day one.</p>
+
+    <figure class="img-block reveal">
+      <img src="content/pitch-deck/21-epic-games-store.png" alt="Epic Games Store">
+      <figcaption>Kekspace on the Epic Games Store - the Web2 to Web3 bridge</figcaption>
+    </figure>
+
+    <div class="opp-grid reveal">
+      <div class="opp-card opp-card--ink">
+        <h4>For Ink</h4>
+        <p>A live game ready for distribution. A reason for Kraken Wallet users to actually bridge to Ink - not because a dashboard told them to, but because there's a world on the other side. Real transaction volume from real usage. A culturally distinctive product that gives Ink a story no other L2 has.</p>
+      </div>
+      <div class="opp-card opp-card--kek">
+        <h4>For Kekspace</h4>
+        <p>The onchain infrastructure to make the economy real. An ecosystem of live protocols to integrate with. A community and distribution network to grow into. The thing that turns a fun game into an actual platform.</p>
+      </div>
+    </div>
+
+    <div class="callout callout--emphasis reveal">
+      <p>We see this as co-builders, not as a project pitching for support. Grow through the ranks on Ink together. Build, ship, measure, share the story publicly. If this works, it becomes the case study for every builder that comes after.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT ========== -->
+<section class="section" id="contact">
+  <div class="container" style="text-align:center;">
+    <h2>Let's talk</h2>
+    <p class="lead" style="max-width:600px;margin:0 auto 24px;">We've never seen this as a pitch. We recognize you guys as builders too - this has always been about being co-builders. Not us asking for something, but figuring out what we can build together. What excites you, what fits, what should we build first - that's the conversation.</p>
+
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="label">Website</div>
+        <div class="value"><a href="https://kekspace.io">kekspace.io</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="label">Twitter / X</div>
+        <div class="value"><a href="https://x.com/pepecoins">@pepecoins</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="label">Telegram</div>
+        <div class="value">@pr0m3theus</div>
+      </div>
+      <div class="contact-item">
+        <div class="label">Email</div>
+        <div class="value"><a href="mailto:admin@pepecoin.io">admin@pepecoin.io</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <p>The game is live. The community is here. Let's build the next chapter together on Ink.</p>
+  </div>
+</footer>
+
+<script>
+/* Slideshow */
+(function(){
+  var slides=document.querySelectorAll('.hero-slide');
+  if(slides.length<2)return;
+  var current=0;
+  setInterval(function(){
+    slides[current].classList.remove('hero-slide--active');
+    current=(current+1)%slides.length;
+    slides[current].classList.add('hero-slide--active');
+  },5000);
+})();
+
+/* Scroll reveal */
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){
+    els.forEach(function(el){el.classList.add('visible');});
+    return;
+  }
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(function(el){observer.observe(el);});
+})();
+</script>
+</body>
+</html>

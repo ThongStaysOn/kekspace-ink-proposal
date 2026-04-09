@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Ink District - Concept</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a12;color:#f0f0f8;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
+
+.concept{max-width:1000px;margin:0 auto;padding:40px 24px}
+
+h1{font-size:2rem;text-align:center;margin-bottom:8px}
+h1 span{color:#a855f7}
+.subtitle{text-align:center;color:#7878a0;font-size:.9rem;margin-bottom:48px}
+
+/* Zone map mockup */
+.zone-map{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  background:#12121f;
+  border-radius:16px;
+  border:2px solid #2a2a44;
+  overflow:hidden;
+  margin-bottom:40px;
+}
+.zone-map-bg{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,#1a1040 0%,#0f0f20 50%,#10102a 100%);
+}
+/* Grid overlay */
+.zone-map-bg::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(168,85,247,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(168,85,247,.05) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+/* Buildings / areas positioned on the map */
+.building{
+  position:absolute;
+  background:rgba(26,26,46,.9);
+  border:2px solid;
+  border-radius:10px;
+  padding:12px;
+  text-align:center;
+  transition:transform .2s,box-shadow .2s;
+  cursor:default;
+}
+.building:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(168,85,247,.3)}
+.building-icon{font-size:1.8rem;margin-bottom:4px}
+.building-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.05em}
+.building-desc{font-size:.55rem;color:#7878a0;margin-top:2px}
+
+/* Color coding */
+.building--portal{border-color:#4ade80;top:8%;left:42%;width:16%}
+.building--portal .building-name{color:#4ade80}
+.building--beholder{border-color:#a855f7;top:25%;left:8%;width:20%}
+.building--beholder .building-name{color:#a855f7}
+.building--nado{border-color:#22d3ee;top:25%;right:8%;width:20%}
+.building--nado .building-name{color:#22d3ee}
+.building--tydro{border-color:#fb923c;top:55%;left:12%;width:18%}
+.building--tydro .building-name{color:#fb923c}
+.building--velodrome{border-color:#f472b6;top:55%;right:12%;width:18%}
+.building--velodrome .building-name{color:#f472b6}
+.building--community{border-color:#eab308;bottom:8%;left:30%;width:18%}
+.building--community .building-name{color:#eab308}
+.building--quest{border-color:#4ade80;bottom:8%;right:18%;width:16%}
+.building--quest .building-name{color:#4ade80}
+/* Center plaza */
+.plaza{
+  position:absolute;
+  top:38%;left:33%;width:34%;height:24%;
+  border:2px dashed rgba(168,85,247,.2);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:4px;
+}
+.plaza-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7878a0}
+.plaza-logo{font-size:.8rem;font-weight:700;color:#a855f7}
+
+/* NPC characters scattered */
+.npc{position:absolute;image-rendering:pixelated;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+
+/* Paths between buildings */
+.path{position:absolute;border:1px dashed rgba(168,85,247,.15)}
+
+/* Legend */
+.legend{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px}
+.legend-item{background:#12121f;border:1px solid #2a2a44;border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.legend-name{font-size:.8rem;font-weight:600}
+.legend-desc{font-size:.7rem;color:#7878a0;margin-top:2px}
+
+/* Description cards */
+.areas{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:40px}
+.area-card{background:#12121f;border:1px solid #2a2a44;border-radius:10px;padding:20px;border-left:3px solid}
+.area-card h3{font-size:.9rem;margin-bottom:6px}
+.area-card p{font-size:.8rem;color:#b0b0c8;line-height:1.6}
+.area-card--portal{border-left-color:#4ade80}
+.area-card--portal h3{color:#4ade80}
+.area-card--beholder{border-left-color:#a855f7}
+.area-card--beholder h3{color:#a855f7}
+.area-card--nado{border-left-color:#22d3ee}
+.area-card--nado h3{color:#22d3ee}
+.area-card--tydro{border-left-color:#fb923c}
+.area-card--tydro h3{color:#fb923c}
+.area-card--velodrome{border-left-color:#f472b6}
+.area-card--velodrome h3{color:#f472b6}
+.area-card--community{border-left-color:#eab308}
+.area-card--community h3{color:#eab308}
+.area-card--quest{border-left-color:#4ade80}
+.area-card--quest h3{color:#4ade80}
+
+/* Reference screenshots */
+.ref{margin-bottom:40px}
+.ref h2{font-size:1.2rem;margin-bottom:16px;color:#a855f7}
+.ref p{font-size:.85rem;color:#7878a0;margin-bottom:16px}
+.ref-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ref-grid img{width:100%;border-radius:8px;border:1px solid #2a2a44}
+.ref-grid-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7878a0;text-align:center;margin-top:4px}
+
+.note{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);border-radius:10px;padding:20px;text-align:center;margin-top:24px}
+.note p{color:#b0b0c8;font-size:.85rem}
+.note strong{color:#a855f7}
+</style>
+</head>
+<body>
+
+<div class="concept">
+  <h1>The <span>Ink</span> District</h1>
+  <p class="subtitle">Concept layout for the Kekspace Ink zone</p>
+
+  <!-- Zone map -->
+  <div class="zone-map">
+    <div class="zone-map-bg"></div>
+
+    <div class="building building--portal">
+      <div class="building-icon">🌀</div>
+      <div class="building-name">ARRIVAL PORTAL</div>
+      <div class="building-desc">Entry point from the city</div>
+    </div>
+
+    <div class="building building--beholder">
+      <div class="building-icon">👁️</div>
+      <div class="building-name">BEHOLDER KIOSK</div>
+      <div class="building-desc">Connect wallet here</div>
+      <div class="building-desc" style="color:#a855f7;margin-top:4px">Phase 2: live wallet</div>
+    </div>
+
+    <div class="building building--nado">
+      <div class="building-icon">📈</div>
+      <div class="building-name">NADO TRADING FLOOR</div>
+      <div class="building-desc">Trading terminals</div>
+      <div class="building-desc" style="color:#22d3ee;margin-top:4px">Phase 2: live trading</div>
+    </div>
+
+    <div class="building building--tydro">
+      <div class="building-icon">🏦</div>
+      <div class="building-name">TYDRO BANK</div>
+      <div class="building-desc">Lending & borrowing</div>
+      <div class="building-desc" style="color:#fb923c;margin-top:4px">Phase 2: live lending</div>
+    </div>
+
+    <div class="building building--velodrome">
+      <div class="building-icon">🏪</div>
+      <div class="building-name">VELODROME BAZAAR</div>
+      <div class="building-desc">Liquidity & pools</div>
+      <div class="building-desc" style="color:#f472b6;margin-top:4px">Phase 2: live LP</div>
+    </div>
+
+    <div class="building building--community">
+      <div class="building-icon">🏠</div>
+      <div class="building-name">COMMUNITY HQ</div>
+      <div class="building-desc">Events, AMAs, hangout</div>
+    </div>
+
+    <div class="building building--quest">
+      <div class="building-icon">📜</div>
+      <div class="building-name">QUEST BOARD</div>
+      <div class="building-desc">Learn Ink, earn rewards</div>
+    </div>
+
+    <div class="plaza">
+      <div class="plaza-label">INK PLAZA</div>
+      <div class="plaza-logo">⬡ INK</div>
+    </div>
+
+    <!-- NPCs -->
+    <img src="site/public/images/game-assets/npcs/executive-pepe.png" class="npc" style="height:50px;bottom:40%;left:38%" alt=""/>
+    <img src="site/public/images/game-assets/npcs/vitalik.png" class="npc" style="height:40px;top:42%;right:30%" alt=""/>
+    <img src="site/public/images/game-assets/npcs/gothic-pepe.png" class="npc" style="height:45px;bottom:25%;left:55%" alt=""/>
+  </div>
+
+  <!-- Area descriptions -->
+  <h2 style="font-size:1.2rem;margin-bottom:16px">What's in each building</h2>
+  <div class="areas">
+    <div class="area-card area-card--portal">
+      <h3>🌀 Arrival Portal</h3>
+      <p>Where players enter the Ink District from the main city. A visual gateway that feels like stepping into something new. An NPC greets you and starts the tour quest.</p>
+    </div>
+    <div class="area-card area-card--beholder">
+      <h3>👁️ Beholder Kiosk</h3>
+      <p>Phase 1: An interactive booth explaining what Beholder is and how wallet connection will work. Phase 2: Live Beholder wallet integration - connect, bridge, go.</p>
+    </div>
+    <div class="area-card area-card--nado">
+      <h3>📈 Nado Trading Floor</h3>
+      <p>Phase 1: A visually rich trading room with market boards and terminals. NPCs explain trading on Ink. Phase 2: Live Nado terminals with Builder Code routing.</p>
+    </div>
+    <div class="area-card area-card--tydro">
+      <h3>🏦 Tydro Bank</h3>
+      <p>Phase 1: A bank building interior with desks and vaults. NPCs walk you through how lending works. Phase 2: Live deposit, borrow, and collateral management.</p>
+    </div>
+    <div class="area-card area-card--velodrome">
+      <h3>🏪 Velodrome Bazaar</h3>
+      <p>Phase 1: A market-style room with pool discovery boards and LP education. Phase 2: Live pool browsing and liquidity provision.</p>
+    </div>
+    <div class="area-card area-card--community">
+      <h3>🏠 Community HQ</h3>
+      <p>A hangout room branded for Ink. Can host community events, AMAs, and gatherings from day one - no wallet needed. This works in Phase 1.</p>
+    </div>
+    <div class="area-card area-card--quest">
+      <h3>📜 Quest Board</h3>
+      <p>Phase 1: Quests that teach players about Ink's ecosystem. Visit each building, talk to NPCs, learn what Nado, Tydro, and Velodrome do. Rewards for completing the tour.</p>
+    </div>
+  </div>
+
+  <!-- Reference: what the art style looks like -->
+  <div class="ref">
+    <h2>Art style reference - existing Kekspace zones</h2>
+    <p>The Ink District would be built in this same isometric pixel art style, but with Ink's purple branding throughout.</p>
+    <div class="ref-grid">
+      <div>
+        <img src="new images/Arcade8K.png" alt="Arcade zone"/>
+        <div class="ref-grid-label">Arcade & Amplexus</div>
+      </div>
+      <div>
+        <img src="new images/City 8K.png" alt="City"/>
+        <div class="ref-grid-label">Main City Hub</div>
+      </div>
+      <div>
+        <img src="new images/Gallery.8K.png" alt="Gallery"/>
+        <div class="ref-grid-label">Gallery Zone</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <p><strong>Phase 1 ($20K):</strong> Build the district, the art, the NPCs, the quests. Everything is explorable and educational. Wallet kiosks and protocol terminals are visual placeholders that say "coming soon."</p>
+    <p style="margin-top:8px"><strong>Phase 2 ($200K):</strong> Wire every kiosk to the real thing. Beholder connects. Nado trades. Tydro lends. Every action becomes a transaction on Ink.</p>
+  </div>
+</div>
+
+</body>
+</html>
